@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Practice</title>
+    <style>
+      /* Global styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 50px;
+      }
+      #quiz-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 100px;
+        background-color: #fff;
+        border-radius: 100px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+      #question {
+        font-size: 40px;
+        margin-bottom: 20px;
+      }
+      #choices button {
+text-align: center;
+        font-weight: bold;
+  font-size: 30px;
+  line-height: 1.5;
+  padding: 20px 55px;
+  background-color: #fff491;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 25px;
+  cursor: pointer;
+  margin: 45px;
+  transition: all 0.2s ease;
+  margin-bottom: 10px;
+  position: relative;
+}
+#choices button:hover {
+  background-color: #333;
+  color: #fff;
+}
+      
+      
+        
+      
+      .correct {
+        background-color: #9ac100;
+        color: #fff;
+      }
+      .incorrect {
+        background-color: #ff5733;
+        color: #fff;
+      }
+      #end-quiz {
+        display: block;
+        margin: 70px auto;
+        padding: 10px 20px;
+        font-size: 30px;
+        background-color: #f5f5f5;
+        border: 2px solid #333;
+        border-radius: 15px;
+        cursor: pointer;
+      }
+      #end-quiz:hover {
+        background-color: #ddd;
+      }
+      #score {
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 10px;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Grades 3 - 4 Practice</h1>
+    <div id="quiz-container">
+      <div id="question"></div>
+      <div id="choices"></div>
+      <div id="score">Score: 0</div>
+      <button id="end-quiz">End Quiz</button>
+    </div>
+
+    <script>
+      // Define the questions and their answers
+      const questions = [
+      {
+question: 'A special die has a number on each face. The sums of the numbers on opposite faces are all equal. Five of the numbers are 5, 6, 9, 11 and 14. What number is on the sixth face?',
+choices: ['A) 7', 'B) 8', ' C) 13', 'D) 15'],
+answer: 3,
+points: 3,
+},
+
+{
+question: 'Some glasses are stacked on top of each other. A stack of 8 glasses is 42 cm high and a stack of 2 glasses is 18 cm high. How high is a stack of 6 glasses?',
+choices: ['A) 24', 'B) 28', 'C) 34', 'D) 40'],
+answer: 2,
+points: 4,
+},{
+question: '10 elves and trolls each were given a token with a different number from 1 to 10 written on it. They were each asked what number was on their token and all answered with a number from 1 to 10. The sum of the answers was 36. Each troll told a lie and each elf told the truth. What is the smallest number of trolls there could be in the group?',
+choices: ['A) 1', 'B) 3', ' C) 4', 'D) 5'],
+answer: 1,
+points: 5,
+},
+      ];
+
+      let currentQuestionIndex = 0;
+      let score = 0;
+      let quizEnded = false;
+      function correctSound () {
+	let sound = new Audio('correctsound.mp3');
+	sound.play();}   
+       function wrongSound () {
+	let sound = new Audio('wrongsound.mp3');
+  sound.volume= 0.5;
+	sound.play();}   
+  function displayImage(src, width, height) {
+ var img = document.createElement("img");
+ img.src = src;
+ document.body.appendChild(img);
+}
+      function loadQuestion() {
+        if (quizEnded) {
+          return;
+        }
+
+        const questionElement = document.getElementById("question");
+        const choicesElement = document.getElementById("choices");
+
+        // Load the current question
+        const currentQuestion = questions[currentQuestionIndex];
+        questionElement.textContent = currentQuestion.question;
+
+        // Load the answer choices
+        choicesElement.innerHTML = "";
+  currentQuestion.choices.forEach((choice, index) => {
+    const button = document.createElement("button");
+    button.textContent = choice;
+    button.addEventListener("click", () => {
+      const resultElement = document.createElement("div");
+      resultElement.style.fontSize = "54px";
+      resultElement.style.fontWeight = "bold";
+      resultElement.style.marginBottom = "10px";
+
+      if (index === currentQuestion.answer) {
+        resultElement.style.color = "#228B22"
+        resultElement.textContent = "Correct!";
+        score += currentQuestion.points;
+        correctSound()
+        displayImage('alpaca.png')
+      } else {
+        resultElement.style.color = "#FF0000"
+        resultElement.textContent = "Incorrect!";
+        wrongSound()
+      }
+      choicesElement.innerHTML = "";
+      choicesElement.appendChild(resultElement);
+      document.getElementById("score").textContent = `Score: ${score}`;
+      currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+      setTimeout(() => {
+        loadQuestion();
+      }, 1500);
+    });
+    choicesElement.appendChild(button);
+  });
+}
+      function endQuiz() {
+  quizEnded = true;
+  const questionElement = document.getElementById("question");
+  const choicesElement = document.getElementById("choices");
+  questionElement.style.display = "none";
+  choicesElement.style.display = "none";
+  const endQuizButton = document.getElementById("end-quiz");
+  endQuizButton.style.display = "none";
+  const scoreElement = document.getElementById("score");
+  scoreElement.textContent = `Final score: ${score}`;
+}
+loadQuestion()
+const endQuizButton = document.getElementById("end-quiz");
+endQuizButton.addEventListener("click", endQuiz);
+      quizEnded
+    </script>
+  </body>
+</html>
